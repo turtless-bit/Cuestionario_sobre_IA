@@ -8,22 +8,10 @@
   <link rel="stylesheet" href="style.css">
   <style>
     /* ── Mobile-first overrides ── */
-    body {
-      padding: 3.5rem 0.75rem 2rem;
-    }
-
-    .main {
-      max-width: 480px;
-    }
-
-    .section-card {
-      padding: 1.75rem 1.1rem;
-    }
-
-    .field-row {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-    }
+    body { padding: 3.5rem 0.75rem 2rem; }
+    .main { max-width: 480px; }
+    .section-card { padding: 1.75rem 1.1rem; }
+    .field-row { grid-template-columns: 1fr; gap: 0.75rem; }
 
     /* Cuadros más oscuros sin tapar la animación */
     .question-block {
@@ -32,14 +20,12 @@
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
-
     .slider-wrap {
       background: rgba(83, 74, 183, 0.22);
       border: 0.5px solid rgba(175, 169, 236, 0.25);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
-
     .section-title {
       background: rgba(8, 8, 8, 0.50);
       border: 0.5px solid rgba(175, 169, 236, 0.35);
@@ -48,84 +34,33 @@
     }
 
     /* Select estilizado */
-    .select-wrap {
-      position: relative;
-    }
-
+    .select-wrap { position: relative; }
     .select-wrap::after {
-      content: '▾';
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--accent-mid);
-      pointer-events: none;
-      font-size: 14px;
+      content: '▾'; position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%); color: var(--accent-mid);
+      pointer-events: none; font-size: 14px;
     }
-
     .styled-select {
-      width: 100%;
-      appearance: none;
-      -webkit-appearance: none;
-      background: rgba(255, 255, 255, 0.06);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 36px 10px 14px;
-      font-size: 13px;
-      color: var(--text);
-      font-family: inherit;
-      outline: none;
-      cursor: pointer;
-      transition: border-color .15s;
+      width: 100%; appearance: none; -webkit-appearance: none;
+      background: rgba(255,255,255,0.06); border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 36px 10px 14px;
+      font-size: 13px; color: var(--text); font-family: inherit;
+      outline: none; cursor: pointer; transition: border-color .15s;
     }
-
-    .styled-select:focus {
-      border-color: var(--accent-mid);
-    }
-
-    .styled-select option {
-      background: #1a1a2e;
-      color: #fff;
-    }
+    .styled-select:focus { border-color: var(--accent-mid); }
+    .styled-select option { background: #1a1a2e; color: #fff; }
 
     /* Ciclo grid */
-    .ciclo-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
-    }
-
-    .ciclo-grid .btn-opt {
-      padding: 8px 4px;
-      font-size: 12px;
-      text-align: center;
-    }
+    .ciclo-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 5px; }
+    .ciclo-grid .btn-opt { padding: 8px 4px; font-size: 12px; text-align: center; }
 
     /* Edad */
-    .edad-display {
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      text-align: center;
-      margin-bottom: 0.6rem;
-      letter-spacing: -1px;
-    }
-
-    .edad-display span {
-      color: var(--accent-mid);
-      font-size: 16px;
-      font-weight: 400;
-      margin-left: 4px;
-    }
-
-    .slider-title {
-      text-align: center;
-    }
+    .edad-display { font-size: 32px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 0.6rem; letter-spacing: -1px; }
+    .edad-display span { color: var(--accent-mid); font-size: 16px; font-weight: 400; margin-left: 4px; }
+    .slider-title { text-align: center; }
 
     /* Likert-5 en móvil: 3 columnas */
-    .likert-group.five {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .likert-group.five { grid-template-columns: repeat(3,1fr); }
   </style>
 </head>
 
@@ -250,8 +185,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Mi primer recurso al iniciar una tarea académica es consultar a una IA antes de
-          analizarla por mí mismo/a.</div>
+        <div class="question-text">Mi primer recurso al iniciar una tarea académica es consultar a una IA antes de analizarla por mí mismo/a.</div>
         <div class="likert-group five" id="q2a1">
           <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q2a1')">En<br>desacuerdo</button>
@@ -262,8 +196,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Suelo utilizar textos generados por IA directamente en mis tareas, realizando solo
-          modificaciones menores.</div>
+        <div class="question-text">Suelo utilizar textos generados por IA directamente en mis tareas, realizando solo modificaciones menores.</div>
         <div class="likert-group five" id="q2a2">
           <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q2a2')">En<br>desacuerdo</button>
@@ -274,7 +207,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Sin acceso a IA, siento que mi rendimiento académico bajaría considerablemente.</div>
+        <div class="question-text">Cuando no tengo acceso a IA, prefiero esperar a tenerlo antes que buscar otras fuentes para avanzar mi tarea.</div>
         <div class="likert-group five" id="q2a3">
           <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q2a3')">En<br>desacuerdo</button>
@@ -285,8 +218,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Suelo priorizar los resúmenes de la IA por encima de la lectura completa de los
-          textos o fuentes originales.</div>
+        <div class="question-text">Suelo priorizar los resúmenes de la IA por encima de la lectura completa de los textos o fuentes originales.</div>
         <div class="likert-group five" id="q2a6">
           <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q2a6')">En<br>desacuerdo</button>
@@ -309,8 +241,7 @@
       <div class="section-title">Impacto percibido</div>
 
       <div class="question-block">
-        <div class="question-text">Siento que el uso frecuente de la IA ha disminuido mi capacidad para concentrarme en
-          lecturas académicas largas.</div>
+        <div class="question-text">Me cuesta mantener la concentración cuando estudio sin apoyo de herramientas digitales.</div>
         <div class="likert-group five" id="q3_1">
           <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q3_1')">En<br>desacuerdo</button>
@@ -321,8 +252,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Me cuesta más sostener un argumento propio por escrito que cuando empecé la
-          universidad.</div>
+        <div class="question-text">Cuando redacto un trabajo académico, desarrollo mis propias ideas antes de consultar cualquier fuente externa.</div>
         <div class="likert-group five" id="q3_2">
           <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q3_2')">En<br>desacuerdo</button>
@@ -333,7 +263,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Creo que el uso de IA está afectando mi memoria y retención de información.</div>
+        <div class="question-text">Cuando estoy exponiendo o en práctica en clase sobre un tema que revisé con IA, me cuesta recordar los detalles sin consultarla de nuevo.</div>
         <div class="likert-group five" id="q3_3">
           <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q3_3')">En<br>desacuerdo</button>
@@ -344,8 +274,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Noto que mi paciencia para resolver problemas complejos de forma manual ha disminuido
-          desde que uso IA.</div>
+        <div class="question-text">Cuando un problema académico me toma más de 10 minutos sin solución, prefiero buscar ayuda en una IA antes de seguir intentándolo.</div>
         <div class="likert-group five" id="q3_4">
           <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q3_4')">En<br>desacuerdo</button>
@@ -379,7 +308,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Cuando uso IA, suelo revisar y contrastar lo que me dice con otras fuentes.</div>
+        <div class="question-text">Cuando no encuentro rápido lo que busco en una IA, prefiero cambiar de herramienta antes que consultar un libro o apunte.</div>
         <div class="likert-group five" id="q4_2">
           <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q4_2')">En<br>desacuerdo</button>
@@ -401,8 +330,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Mi rendimiento en la universidad depende principalmente de mi propio esfuerzo, no de
-          herramientas externas.</div>
+        <div class="question-text">Mi rendimiento en la universidad depende principalmente de mi propio esfuerzo, no de herramientas externas.</div>
         <div class="likert-group five" id="q4_5">
           <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q4_5')">En<br>desacuerdo</button>
@@ -447,8 +375,7 @@
       </div>
 
       <div class="question-block">
-        <div class="question-text">Las formas de evaluación en mi universidad (exámenes, trabajos) tienen sentido en la
-          era de la IA.</div>
+        <div class="question-text">Las formas de evaluación en mi universidad (exámenes, trabajos) tienen sentido en la era de la IA.</div>
         <div class="likert-group five" id="q5_3">
           <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Totalmente<br>en desacuerdo</button>
           <button class="likert-btn" onclick="selectLikert(this,'q5_3')">En<br>desacuerdo</button>
@@ -461,11 +388,9 @@
       <div class="divider"></div>
 
       <div class="question-block">
-        <div class="question-text">¿Estarías dispuesto/a a participar en una entrevista de 10 minutos sobre este tema?
-        </div>
+        <div class="question-text">¿Estarías dispuesto/a a participar en una entrevista de 20 minutos sobre este tema?</div>
         <div class="btn-group" id="q5_entrevista">
-          <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(true)">Sí, me
-            interesa</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(true)">Sí, me interesa</button>
           <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(false)">No por ahora</button>
         </div>
         <div id="contactField" style="display:none; margin-top:1rem;">
