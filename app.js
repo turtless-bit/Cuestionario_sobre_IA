@@ -104,7 +104,7 @@ const SUPABASE_URL = 'https://rttlxajrakrcosyyssnv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dGx4YWpyYWtyY29zeXlzc252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4OTM1MzcsImV4cCI6MjA5NDQ2OTUzN30.R-1G58MfZWAinAl0QiOm4koUdSt1GDeX-ot00Bs3728';
 
 // Tiempo mínimo aceptable en segundos (5 minutos)
-const TIEMPO_MINIMO = 300;
+const TIEMPO_MINIMO = 60;
 
 function collectData() {
   const data = {};
