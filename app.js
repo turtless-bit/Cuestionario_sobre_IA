@@ -123,12 +123,14 @@ function collectData() {
   data.pct_trabajo = parseInt(document.getElementById('q_pct').value);
 
   [
-    'q2a1', 'q2a2', 'q2a3', 'q2a6',
+    'q2a1', 'q2a2', 'q2a3', 'q2a4',  // q2a4 = "Priorizo resúmenes de IA" (antes q2a6 en HTML — verificar nombre en Supabase)
     'q3_1', 'q3_2', 'q3_3', 'q3_4',
     'q4_1', 'q4_2', 'q4_3', 'q4_5',
     'q5_1', 'q5_2', 'q5_3'
   ].forEach(id => {
-    const s = document.querySelector('#' + id + ' .selected');
+    // Para q2a4: leer desde el elemento HTML que tiene id="q2a6"
+    const htmlId = id === 'q2a4' ? 'q2a6' : id;
+    const s = document.querySelector('#' + htmlId + ' .selected');
     data[id] = s ? s.textContent.trim() : '';
   });
 
