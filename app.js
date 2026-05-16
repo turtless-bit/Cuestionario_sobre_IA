@@ -2,14 +2,22 @@
    FORM LOGIC
    ════════════════════════════════════════ */
 
+// ── Cronómetro: inicia al llegar a Sección 2 ──
+let _timerStart = null;
+
 function selectBtn(btn, groupId) {
   document.querySelectorAll('#' + groupId + ' .btn-opt').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
+  // Limpiar error visual si lo había
+  const wrap = btn.closest('.question-block');
+  if (wrap) wrap.classList.remove('q-error');
 }
 
 function selectLikert(btn, groupId) {
   document.querySelectorAll('#' + groupId + ' .likert-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
+  const wrap = btn.closest('.question-block');
+  if (wrap) wrap.classList.remove('q-error');
 }
 
 function updateSlider(val) {
@@ -18,6 +26,8 @@ function updateSlider(val) {
 
 function toggleContact(show) {
   document.getElementById('contactField').style.display = show ? 'block' : 'none';
+  const wrap = document.querySelector('#q5_entrevista')?.closest('.question-block');
+  if (wrap) wrap.classList.remove('q-error');
 }
 
 function updateProgress(current) {
@@ -28,7 +38,53 @@ function updateProgress(current) {
   document.getElementById('progressLabel').textContent = current + ' / 5';
 }
 
+// ── Validación por sección ──
+// Devuelve array de IDs de grupos sin respuesta en una sección
+function getMissing(secId) {
+  const sec = document.getElementById(secId);
+  const missing = [];
+
+  // Grupos de botones (.btn-group) y likert (.likert-group) — busca selected
+  sec.querySelectorAll('.btn-group[id], .likert-group[id]').forEach(group => {
+    if (!group.querySelector('.selected')) missing.push(group.id);
+  });
+
+  // Carrera (select) — solo en sec1
+  if (secId === 'sec1') {
+    const carrera = document.getElementById('q_carrera');
+    if (!carrera.value) missing.push('q_carrera');
+  }
+
+  return missing;
+}
+
+function showErrors(secId, missingIds) {
+  // Limpiar errores anteriores
+  document.getElementById(secId).querySelectorAll('.q-error').forEach(el => el.classList.remove('q-error'));
+
+  missingIds.forEach(id => {
+    const group = document.getElementById(id);
+    if (group) {
+      const block = group.closest('.question-block') || group.closest('.select-wrap')?.parentElement;
+      if (block) block.classList.add('q-error');
+    }
+  });
+
+  // Hacer scroll al primer error
+  const first = document.getElementById(secId).querySelector('.q-error');
+  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 function goNext(from) {
+  const missing = getMissing('sec' + from);
+  if (missing.length > 0) {
+    showErrors('sec' + from, missing);
+    return;
+  }
+
+  // Iniciar cronómetro al salir de Sección 1 (entrar a Sección 2)
+  if (from === 1 && !_timerStart) _timerStart = Date.now();
+
   document.getElementById('sec' + from).classList.remove('active');
   document.getElementById('sec' + (from + 1)).classList.add('active');
   updateProgress(from + 1);
@@ -46,18 +102,19 @@ function goBack(from) {
 const SUPABASE_URL = 'https://rttlxajrakrcosyyssnv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dGx4YWpyYWtyY29zeXlzc252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4OTM1MzcsImV4cCI6MjA5NDQ2OTUzN30.R-1G58MfZWAinAl0QiOm4koUdSt1GDeX-ot00Bs3728';
 
+// Tiempo mínimo aceptable en segundos (5 minutos)
+const TIEMPO_MINIMO = 300;
+
 function collectData() {
   const data = {};
   data.carrera = document.getElementById('q_carrera').value;
 
-  // Ciclo: viene de botones
   const ciclo = document.querySelector('#q_ciclo .selected');
   data.ciclo = ciclo ? ciclo.textContent.trim() : '';
 
-  // Edad: viene del slider directamente
   data.edad = parseInt(document.getElementById('q_edad').value);
 
-  const camposBD = {'q_genero':'genero','q_desde':'desde_cuando','q_frecuencia':'frecuencia'};
+  const camposBD = { 'q_genero': 'genero', 'q_desde': 'desde_cuando', 'q_frecuencia': 'frecuencia' };
   Object.entries(camposBD).forEach(([f, col]) => {
     const s = document.querySelector('#' + f + ' .selected');
     data[col] = s ? s.textContent.trim() : '';
@@ -66,11 +123,10 @@ function collectData() {
   data.pct_trabajo = parseInt(document.getElementById('q_pct').value);
 
   [
-    'q2a1','q2a2','q2a3','q2a4','q2a5','q2a6',
-    'q2b2','q2b3',
-    'q3_1','q3_2','q3_3','q3_4','q3_5','q3_6',
-    'q4_1','q4_2','q4_3','q4_5','q4_6',
-    'q5_1','q5_2','q5_3','q5_4','q5_5'
+    'q2a1', 'q2a2', 'q2a3', 'q2a6',
+    'q3_1', 'q3_2', 'q3_3', 'q3_4',
+    'q4_1', 'q4_2', 'q4_3', 'q4_5',
+    'q5_1', 'q5_2', 'q5_3'
   ].forEach(id => {
     const s = document.querySelector('#' + id + ' .selected');
     data[id] = s ? s.textContent.trim() : '';
@@ -79,10 +135,23 @@ function collectData() {
   const e = document.querySelector('#q5_entrevista .selected');
   data.q5_entrevista = e ? e.textContent.trim() : '';
   data.contacto = document.getElementById('q_contacto').value;
+
+  // Tiempo y validez
+  const segundos = _timerStart ? Math.round((Date.now() - _timerStart) / 1000) : 0;
+  data.tiempo_segundos = segundos;
+  data.sospechoso = segundos < TIEMPO_MINIMO;
+
   return data;
 }
 
 async function submitForm() {
+  // Validar sección 5 antes de enviar
+  const missing = getMissing('sec5');
+  if (missing.length > 0) {
+    showErrors('sec5', missing);
+    return;
+  }
+
   const btn = document.querySelector('.btn-submit');
   btn.textContent = 'Enviando…';
   btn.disabled = true;
@@ -106,7 +175,6 @@ async function submitForm() {
       throw new Error(JSON.stringify(err));
     }
 
-    // Éxito
     document.getElementById('sec5').classList.remove('active');
     document.getElementById('thankYou').classList.add('active');
     document.getElementById('progressBar').style.display = 'none';

@@ -193,6 +193,21 @@ body {
 .text-field::placeholder { color:var(--text-muted); }
 .text-field:focus { border-color:var(--accent-mid); }
 
+/* ── Validación: pregunta sin responder ── */
+.q-error {
+  border-color: var(--coral) !important;
+  background: rgba(216, 90, 48, 0.08) !important;
+}
+.q-error::after {
+  content: '← Requerido';
+  display: block;
+  font-size: 11px;
+  color: var(--coral);
+  margin-top: 6px;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+
 /* ── Misc ── */
 .divider { height:.5px; background:var(--border); margin:1.25rem 0; }
 
