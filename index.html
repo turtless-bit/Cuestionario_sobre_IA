@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -7,29 +8,45 @@
   <link rel="stylesheet" href="style.css">
   <style>
     /* ── Mobile-first overrides ── */
-    body { padding: 3.5rem 0.75rem 2rem; }
-    .main { max-width: 480px; }
-    .section-card { padding: 1.75rem 1.1rem; }
+    body {
+      padding: 3.5rem 0.75rem 2rem;
+    }
+
+    .main {
+      max-width: 480px;
+    }
+
+    .section-card {
+      padding: 1.75rem 1.1rem;
+    }
 
     /* Todos los bloques apilados */
-    .field-row { grid-template-columns: 1fr; gap: 0.75rem; }
+    .field-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
 
     /* Select estilizado */
-    .select-wrap { position: relative; }
+    .select-wrap {
+      position: relative;
+    }
+
     .select-wrap::after {
       content: '▾';
       position: absolute;
-      right: 14px; top: 50%;
+      right: 14px;
+      top: 50%;
       transform: translateY(-50%);
       color: var(--accent-mid);
       pointer-events: none;
       font-size: 14px;
     }
+
     .styled-select {
       width: 100%;
       appearance: none;
       -webkit-appearance: none;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       border: 0.5px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 10px 36px 10px 14px;
@@ -40,8 +57,15 @@
       cursor: pointer;
       transition: border-color .15s;
     }
-    .styled-select:focus { border-color: var(--accent-mid); }
-    .styled-select option { background: #1a1a2e; color: #fff; }
+
+    .styled-select:focus {
+      border-color: var(--accent-mid);
+    }
+
+    .styled-select option {
+      background: #1a1a2e;
+      color: #fff;
+    }
 
     /* Ciclo: 5 columnas × 2 filas */
     .ciclo-grid {
@@ -49,6 +73,7 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 5px;
     }
+
     .ciclo-grid .btn-opt {
       padding: 8px 4px;
       font-size: 12px;
@@ -64,461 +89,479 @@
       margin-bottom: 0.6rem;
       letter-spacing: -1px;
     }
-    .edad-display span { color: var(--accent-mid); font-size: 16px; font-weight: 400; margin-left: 4px; }
+
+    .edad-display span {
+      color: var(--accent-mid);
+      font-size: 16px;
+      font-weight: 400;
+      margin-left: 4px;
+    }
 
     /* Título slider centrado, sin emoji */
-    .slider-title { text-align: center; }
+    .slider-title {
+      text-align: center;
+    }
 
     /* Likert-5 en móvil: 3 columnas */
-    .likert-group.five { grid-template-columns: repeat(3, 1fr); }
+    .likert-group.five {
+      grid-template-columns: repeat(3, 1fr);
+    }
   </style>
 </head>
+
 <body>
 
-<canvas id="bg-canvas"></canvas>
+  <canvas id="bg-canvas"></canvas>
 
-<div class="progress-bar-wrap" id="progressBar">
-  <div class="progress-steps">
-    <div class="step-pill active" id="pill1"></div>
-    <div class="step-pill" id="pill2"></div>
-    <div class="step-pill" id="pill3"></div>
-    <div class="step-pill" id="pill4"></div>
-    <div class="step-pill" id="pill5"></div>
-  </div>
-  <div class="progress-label" id="progressLabel">1 / 5</div>
-</div>
-
-<div class="main">
-
-  <!-- ── SECCIÓN 1: Datos generales ── -->
-  <div class="section-card active" id="sec1">
-    <div class="section-title">Datos generales</div>
-
-    <!-- Carrera: select desplegable -->
-    <div class="question-block">
-      <div class="field-label">Carrera</div>
-      <div class="select-wrap">
-        <select class="styled-select" id="q_carrera">
-          <option value="" disabled selected>Selecciona tu carrera</option>
-          <option>Ing. de Sistemas</option>
-          <option>Ing. Agroindustrial</option>
-          <option>Ing. Ambiental</option>
-          <option>Ing. Civil</option>
-          <option>Matemáticas y Estadística</option>
-          <option>Administración de Empresas</option>
-          <option>Contabilidad</option>
-          <option>Educación Primaria Intercultural</option>
-          <option>Enfermería</option>
-          <option>Psicología</option>
-        </select>
-      </div>
+  <div class="progress-bar-wrap" id="progressBar">
+    <div class="progress-steps">
+      <div class="step-pill active" id="pill1"></div>
+      <div class="step-pill" id="pill2"></div>
+      <div class="step-pill" id="pill3"></div>
+      <div class="step-pill" id="pill4"></div>
+      <div class="step-pill" id="pill5"></div>
     </div>
-
-    <!-- Ciclo: 10 casillas, 2 filas de 5 -->
-    <div class="question-block">
-      <div class="field-label">Ciclo académico</div>
-      <div class="ciclo-grid" id="q_ciclo">
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">1°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">2°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">3°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">4°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">5°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">6°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">7°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">8°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">9°</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">10°</button>
-      </div>
-    </div>
-
-    <!-- Edad: slider interactivo -->
-    <div class="question-block">
-      <div class="field-label">Edad</div>
-      <div class="edad-display" id="edadDisplay">20<span>años</span></div>
-      <input class="slider-input" style="width:100%;" type="range" min="16" max="45" value="20" step="1"
-             id="q_edad" oninput="document.getElementById('edadDisplay').innerHTML=this.value+'<span>años</span>'">
-      <div class="slider-track-labels"><span>16</span><span>30</span><span>45+</span></div>
-    </div>
-
-    <!-- Género -->
-    <div class="question-block">
-      <div class="field-label">Género</div>
-      <div class="btn-group" id="q_genero">
-        <button class="btn-opt" onclick="selectBtn(this,'q_genero')">Mujer</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_genero')">Hombre</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_genero')">No binario</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_genero')">Prefiero no decir</button>
-      </div>
-    </div>
-
-    <!-- Desde cuándo: 5 opciones -->
-    <div class="question-block">
-      <div class="question-text">¿Desde cuándo usas herramientas de IA con regularidad?</div>
-      <div class="btn-group" id="q_desde">
-        <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2023</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2024</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2025</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2026</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_desde')">Aún no uso IA</button>
-      </div>
-    </div>
-
-    <!-- Frecuencia -->
-    <div class="question-block">
-      <div class="question-text">¿Con qué frecuencia usas IA en tu vida académica?</div>
-      <div class="btn-group" id="q_frecuencia">
-        <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Nunca</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Raramente</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">A veces</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Frecuentemente</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Todos los días</button>
-      </div>
-    </div>
-
-    <div class="nav-row">
-      <div></div>
-      <button class="btn-nav btn-next" onclick="goNext(1)">Siguiente &#8594;</button>
-    </div>
+    <div class="progress-label" id="progressLabel">1 / 5</div>
   </div>
 
-  <!-- ── SECCIÓN 2: Uso e integración de la IA ── -->
-  <div class="section-card" id="sec2">
-    <div class="section-title">Uso e integración de la IA</div>
+  <div class="main">
 
-    <div class="slider-wrap">
-      <div class="slider-title">¿Qué porcentaje de tu trabajo académico involucra IA?</div>
-      <div class="slider-row">
-        <input class="slider-input" type="range" min="0" max="100" value="30" step="1" id="q_pct" oninput="updateSlider(this.value)">
-        <div class="slider-val" id="sliderVal">30%</div>
+    <!-- ── SECCIÓN 1: Datos generales ── -->
+    <div class="section-card active" id="sec1">
+      <div class="section-title">Datos generales</div>
+
+      <!-- Carrera: select desplegable -->
+      <div class="question-block">
+        <div class="field-label">Carrera</div>
+        <div class="select-wrap">
+          <select class="styled-select" id="q_carrera">
+            <option value="" disabled selected>Selecciona tu carrera</option>
+            <option>Ing. de Sistemas</option>
+            <option>Ing. Agroindustrial</option>
+            <option>Ing. Ambiental</option>
+            <option>Ing. Civil</option>
+            <option>Matemáticas y Estadística</option>
+            <option>Administración de Empresas</option>
+            <option>Contabilidad</option>
+            <option>Educación Primaria Intercultural</option>
+            <option>Enfermería</option>
+            <option>Psicología</option>
+          </select>
+        </div>
       </div>
-      <div class="slider-track-labels"><span>0% — nada</span><span>50% — mitad</span><span>100% — todo</span></div>
-    </div>
 
-    <div class="subsection-title">Integración conductual</div>
-
-    <div class="question-block">
-      <div class="question-text">Cuando tengo una tarea, acudo a la IA antes de intentar resolverla por mi cuenta.</div>
-      <div class="likert-group" id="q2a1">
-        <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a1')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Siempre</button>
+      <!-- Ciclo: 10 casillas, 2 filas de 5 -->
+      <div class="question-block">
+        <div class="field-label">Ciclo académico</div>
+        <div class="ciclo-grid" id="q_ciclo">
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">1°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">2°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">3°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">4°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">5°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">6°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">7°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">8°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">9°</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_ciclo')">10°</button>
+        </div>
       </div>
-    </div>
 
-    <div class="question-block">
-      <div class="question-text">He entregado contenido generado por IA sin modificarlo significativamente.</div>
-      <div class="likert-group" id="q2a2">
-        <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a2')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Siempre</button>
+      <!-- Edad: slider interactivo -->
+      <div class="question-block">
+        <div class="field-label">Edad</div>
+        <div class="edad-display" id="edadDisplay">20<span>años</span></div>
+        <input class="slider-input" style="width:100%;" type="range" min="16" max="45" value="20" step="1" id="q_edad"
+          oninput="document.getElementById('edadDisplay').innerHTML=this.value+'<span>años</span>'">
+        <div class="slider-track-labels"><span>16</span><span>30</span><span>45+</span></div>
       </div>
-    </div>
 
-    <div class="question-block">
-      <div class="question-text">Sin acceso a IA, siento que mi rendimiento académico bajaría considerablemente.</div>
-      <div class="likert-group" id="q2a3">
-        <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a3')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Siempre</button>
+      <!-- Género -->
+      <div class="question-block">
+        <div class="field-label">Género</div>
+        <div class="btn-group" id="q_genero">
+          <button class="btn-opt" onclick="selectBtn(this,'q_genero')">Mujer</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_genero')">Hombre</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_genero')">No binario</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_genero')">Prefiero no decir</button>
+        </div>
       </div>
-    </div>
 
-    <div class="question-block">
-      <div class="question-text">Uso la IA principalmente para revisar y mejorar ideas que yo ya desarrollé.</div>
-      <div class="likert-group" id="q2a4">
-        <button class="likert-btn" onclick="selectLikert(this,'q2a4')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a4')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a4')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a4')">Siempre</button>
+      <!-- Desde cuándo: 5 opciones -->
+      <div class="question-block">
+        <div class="question-text">¿Desde cuándo usas herramientas de IA con regularidad?</div>
+        <div class="btn-group" id="q_desde">
+          <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2023</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2024</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2025</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_desde')">2026</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_desde')">Aún no uso IA</button>
+        </div>
       </div>
-    </div>
 
-    <div class="question-block">
-      <div class="question-text">La IA me ha permitido comprender temas que antes no lograba entender solo/a.</div>
-      <div class="likert-group" id="q2a5">
-        <button class="likert-btn" onclick="selectLikert(this,'q2a5')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a5')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a5')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a5')">Siempre</button>
+      <!-- Frecuencia -->
+      <div class="question-block">
+        <div class="question-text">¿Con qué frecuencia usas IA en tu vida académica?</div>
+        <div class="btn-group" id="q_frecuencia">
+          <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Nunca</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Raramente</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">A veces</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Frecuentemente</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q_frecuencia')">Todos los días</button>
+        </div>
       </div>
-    </div>
 
-    <div class="question-block">
-      <div class="question-text">Dedico menos tiempo a leer fuentes originales desde que uso IA.</div>
-      <div class="likert-group" id="q2a6">
-        <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a6')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-    <div class="subsection-title">Uso emocional</div>
-
-    <div class="question-block">
-      <div class="question-text">He usado una IA para hablar sobre algo que me preocupaba emocionalmente.</div>
-      <div class="likert-group" id="q2b1">
-        <button class="likert-btn" onclick="selectLikert(this,'q2b1')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b1')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b1')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b1')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Cuando necesito desahogarme o procesar algo difícil, la IA es una opción que considero.</div>
-      <div class="likert-group" id="q2b2">
-        <button class="likert-btn" onclick="selectLikert(this,'q2b2')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b2')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b2')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b2')">Siempre</button>
+      <div class="nav-row">
+        <div></div>
+        <button class="btn-nav btn-next" onclick="goNext(1)">Siguiente &#8594;</button>
       </div>
     </div>
 
-    <div class="question-block">
-      <div class="question-text">Confío más en la opinión de una IA que en la de mis compañeros para tomar decisiones académicas importantes.</div>
-      <div class="likert-group" id="q2b3">
-        <button class="likert-btn" onclick="selectLikert(this,'q2b3')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b3')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b3')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q2b3')">Siempre</button>
+    <!-- ── SECCIÓN 2: Uso e integración de la IA ── -->
+    <div class="section-card" id="sec2">
+      <div class="section-title">Uso e integración de la IA</div>
+
+      <div class="slider-wrap">
+        <div class="slider-title">¿Qué porcentaje de tu trabajo académico involucra IA?</div>
+        <div class="slider-row">
+          <input class="slider-input" type="range" min="0" max="100" value="30" step="1" id="q_pct"
+            oninput="updateSlider(this.value)">
+          <div class="slider-val" id="sliderVal">30%</div>
+        </div>
+        <div class="slider-track-labels"><span>0% — nada</span><span>50% — mitad</span><span>100% — todo</span></div>
+      </div>
+
+      <div class="subsection-title">Integración conductual</div>
+
+      <div class="question-block">
+        <div class="question-text">Mi primer recurso al iniciar una tarea académica es consultar a una IA antes de
+          analizarla por mí mismo/a</div>
+        <div class="likert-group" id="q2a1">
+          <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a1')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a1')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Suelo utilizar textos generados por IA directamente en mis tareas, realizando solo
+          modificaciones menores.</div>
+        <div class="likert-group" id="q2a2">
+          <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a2')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a2')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Sin acceso a IA, siento que mi rendimiento académico bajaría considerablemente.</div>
+        <div class="likert-group" id="q2a3">
+          <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a3')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a3')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Uso la IA principalmente para revisar y mejorar ideas que yo ya desarrollé.</div>
+        <div class="likert-group" id="q2a4">
+          <button class="likert-btn" onclick="selectLikert(this,'q2a4')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a4')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a4')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a4')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">La IA me ha permitido comprender temas que antes no lograba entender solo/a.</div>
+        <div class="likert-group" id="q2a5">
+          <button class="likert-btn" onclick="selectLikert(this,'q2a5')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a5')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a5')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a5')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Suelo priorizar los resúmenes de la IA por encima de la lectura completa de los
+          textos o fuentes originales.</div>
+        <div class="likert-group" id="q2a6">
+          <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a6')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2a6')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="subsection-title">Uso emocional</div>
+
+      <div class="question-block">
+        <div class="question-text">Cuando necesito desahogarme o procesar algo difícil, la IA es una opción que
+          considero.</div>
+        <div class="likert-group" id="q2b2">
+          <button class="likert-btn" onclick="selectLikert(this,'q2b2')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2b2')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2b2')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2b2')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Confío más en la opinión de una IA que en la de mis compañeros para tomar decisiones
+          académicas importantes.</div>
+        <div class="likert-group" id="q2b3">
+          <button class="likert-btn" onclick="selectLikert(this,'q2b3')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2b3')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2b3')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q2b3')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-nav btn-back" onclick="goBack(2)">&#8592; Atrás</button>
+        <button class="btn-nav btn-next" onclick="goNext(2)">Siguiente &#8594;</button>
       </div>
     </div>
 
-    <div class="nav-row">
-      <button class="btn-nav btn-back" onclick="goBack(2)">&#8592; Atrás</button>
-      <button class="btn-nav btn-next" onclick="goNext(2)">Siguiente &#8594;</button>
+    <!-- ── SECCIÓN 3: Impacto percibido ── -->
+    <div class="section-card" id="sec3">
+      <div class="section-title">Impacto percibido</div>
+
+      <div class="question-block">
+        <div class="question-text">Siento que el uso frecuente de la IA ha disminuido mi capacidad para concentrarme en
+          lecturas académicas largas.</div>
+        <div class="likert-group five" id="q3_1">
+          <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_1')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_1')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Me cuesta más sostener un argumento propio por escrito que cuando empecé la
+          universidad.</div>
+        <div class="likert-group five" id="q3_2">
+          <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_2')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_2')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Creo que el uso de IA está afectando mi memoria y retención de información.</div>
+        <div class="likert-group five" id="q3_3">
+          <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_3')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_3')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Noto que mi paciencia para resolver problemas complejos de forma manual ha disminuido
+          desde que uso IA.</div>
+        <div class="likert-group five" id="q3_4">
+          <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_4')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_4')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Noto que recuerdo menos lo que aprendo cuando lo hice con ayuda de IA que cuando lo
+          trabajé solo/a.</div>
+        <div class="likert-group five" id="q3_5">
+          <button class="likert-btn" onclick="selectLikert(this,'q3_5')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_5')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_5')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_5')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_5')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Siento que mi forma de resolver problemas ha cambiado desde que uso IA regularmente.
+        </div>
+        <div class="likert-group five" id="q3_6">
+          <button class="likert-btn" onclick="selectLikert(this,'q3_6')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_6')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_6')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_6')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q3_6')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-nav btn-back" onclick="goBack(3)">&#8592; Atrás</button>
+        <button class="btn-nav btn-next" onclick="goNext(3)">Siguiente &#8594;</button>
+      </div>
     </div>
+
+    <!-- ── SECCIÓN 4: Percepciones ── -->
+    <div class="section-card" id="sec4">
+      <div class="section-title">Percepciones</div>
+
+      <div class="question-block">
+        <div class="question-text">Prefiero enfrentar una tarea difícil por mi cuenta antes de consultar la IA.</div>
+        <div class="likert-group" id="q4_1">
+          <button class="likert-btn" onclick="selectLikert(this,'q4_1')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_1')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_1')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_1')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Cuando uso IA, suelo revisar y contrastar lo que me dice con otras fuentes.</div>
+        <div class="likert-group" id="q4_2">
+          <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_2')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Me siento más seguro/a trabajando con IA que sin ella.</div>
+        <div class="likert-group" id="q4_3">
+          <button class="likert-btn" onclick="selectLikert(this,'q4_3')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_3')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_3')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_3')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Mi rendimiento en la universidad depende principalmente de mi propio esfuerzo, no de
+          herramientas externas.</div>
+        <div class="likert-group" id="q4_5">
+          <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_5')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Cuando estudio sin IA, siento que retengo y comprendo mejor la información.</div>
+        <div class="likert-group" id="q4_6">
+          <button class="likert-btn" onclick="selectLikert(this,'q4_6')">Nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_6')">Casi nunca</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_6')">A veces</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q4_6')">Siempre</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-nav btn-back" onclick="goBack(4)">&#8592; Atrás</button>
+        <button class="btn-nav btn-next" onclick="goNext(4)">Siguiente &#8594;</button>
+      </div>
+    </div>
+
+    <!-- ── SECCIÓN 5: Contexto y entorno ── -->
+    <div class="section-card" id="sec5">
+      <div class="section-title">Contexto y entorno</div>
+
+      <div class="question-block">
+        <div class="question-text">Mis profesores están actualizados respecto al uso de IA en la educación.</div>
+        <div class="likert-group five" id="q5_1">
+          <button class="likert-btn" onclick="selectLikert(this,'q5_1')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_1')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_1')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_1')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_1')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">El sistema universitario actual me prepara bien para un mundo con IA.</div>
+        <div class="likert-group five" id="q5_2">
+          <button class="likert-btn" onclick="selectLikert(this,'q5_2')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_2')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_2')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_2')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_2')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Las formas de evaluación en mi universidad (exámenes, trabajos) tienen sentido en la
+          era de la IA.</div>
+        <div class="likert-group five" id="q5_3">
+          <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_3')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_3')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">En mi familia o entorno cercano, el uso de IA es algo común y normalizado.</div>
+        <div class="likert-group five" id="q5_4">
+          <button class="likert-btn" onclick="selectLikert(this,'q5_4')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_4')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_4')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_4')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_4')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text">Las personas de mi entorno han influido en cómo uso la IA.</div>
+        <div class="likert-group five" id="q5_5">
+          <button class="likert-btn" onclick="selectLikert(this,'q5_5')">Totalmente<br>en desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_5')">En<br>desacuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_5')">Neutral</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_5')">De<br>acuerdo</button>
+          <button class="likert-btn" onclick="selectLikert(this,'q5_5')">Totalmente<br>de acuerdo</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="question-block">
+        <div class="question-text">¿Estarías dispuesto/a a participar en una entrevista de 20 minutos sobre este tema?
+        </div>
+        <div class="btn-group" id="q5_entrevista">
+          <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(true)">Sí, me
+            interesa</button>
+          <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(false)">No por ahora</button>
+        </div>
+        <div id="contactField" style="display:none; margin-top:1rem;">
+          <div class="field-label">Correo o WhatsApp (opcional)</div>
+          <input class="text-field" type="text" id="q_contacto" placeholder="tu@correo.com o +51 9xx xxx xxx">
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-nav btn-back" onclick="goBack(5)">&#8592; Atrás</button>
+        <button class="btn-nav btn-submit" onclick="submitForm()">Enviar respuestas &#10003;</button>
+      </div>
+    </div>
+
+    <!-- ── GRACIAS ── -->
+    <div class="thank-you" id="thankYou">
+      <div class="ty-icon">&#10003;</div>
+      <div class="ty-title">¡Gracias por participar!</div>
+      <p class="ty-text">Tus respuestas contribuyen a entender cómo la IA está moldeando la experiencia universitaria.
+        Si dejaste tu contacto, nos comunicaremos pronto.</p>
+    </div>
+
   </div>
 
-  <!-- ── SECCIÓN 3: Impacto percibido ── -->
-  <div class="section-card" id="sec3">
-    <div class="section-title">Impacto percibido</div>
-
-    <div class="question-block">
-      <div class="question-text">Siento que mi capacidad de concentrarme en lecturas largas ha disminuido en los últimos años.</div>
-      <div class="likert-group five" id="q3_1">
-        <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_1')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_1')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_1')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Me cuesta más sostener un argumento propio por escrito que cuando empecé la universidad.</div>
-      <div class="likert-group five" id="q3_2">
-        <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_2')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_2')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_2')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Creo que el uso de IA está afectando mi memoria y retención de información.</div>
-      <div class="likert-group five" id="q3_3">
-        <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_3')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_3')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_3')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Siento que desde que uso IA me cuesta más mantener la atención en una sola tarea por períodos largos.</div>
-      <div class="likert-group five" id="q3_4">
-        <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_4')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_4')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_4')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Noto que recuerdo menos lo que aprendo cuando lo hice con ayuda de IA que cuando lo trabajé solo/a.</div>
-      <div class="likert-group five" id="q3_5">
-        <button class="likert-btn" onclick="selectLikert(this,'q3_5')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_5')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_5')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_5')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_5')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Siento que mi forma de resolver problemas ha cambiado desde que uso IA regularmente.</div>
-      <div class="likert-group five" id="q3_6">
-        <button class="likert-btn" onclick="selectLikert(this,'q3_6')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_6')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_6')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_6')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q3_6')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="nav-row">
-      <button class="btn-nav btn-back" onclick="goBack(3)">&#8592; Atrás</button>
-      <button class="btn-nav btn-next" onclick="goNext(3)">Siguiente &#8594;</button>
-    </div>
-  </div>
-
-  <!-- ── SECCIÓN 4: Percepciones ── -->
-  <div class="section-card" id="sec4">
-    <div class="section-title">Percepciones</div>
-
-    <div class="question-block">
-      <div class="question-text">Prefiero enfrentar una tarea difícil por mi cuenta antes de consultar la IA.</div>
-      <div class="likert-group" id="q4_1">
-        <button class="likert-btn" onclick="selectLikert(this,'q4_1')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_1')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_1')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_1')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Cuando uso IA, suelo revisar y contrastar lo que me dice con otras fuentes.</div>
-      <div class="likert-group" id="q4_2">
-        <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_2')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_2')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Me siento más seguro/a trabajando con IA que sin ella.</div>
-      <div class="likert-group" id="q4_3">
-        <button class="likert-btn" onclick="selectLikert(this,'q4_3')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_3')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_3')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_3')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Mi rendimiento en la universidad depende principalmente de mi propio esfuerzo, no de herramientas externas.</div>
-      <div class="likert-group" id="q4_5">
-        <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_5')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_5')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Cuando estudio sin IA, siento que retengo y comprendo mejor la información.</div>
-      <div class="likert-group" id="q4_6">
-        <button class="likert-btn" onclick="selectLikert(this,'q4_6')">Nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_6')">Casi nunca</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_6')">A veces</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q4_6')">Siempre</button>
-      </div>
-    </div>
-
-    <div class="nav-row">
-      <button class="btn-nav btn-back" onclick="goBack(4)">&#8592; Atrás</button>
-      <button class="btn-nav btn-next" onclick="goNext(4)">Siguiente &#8594;</button>
-    </div>
-  </div>
-
-  <!-- ── SECCIÓN 5: Contexto y entorno ── -->
-  <div class="section-card" id="sec5">
-    <div class="section-title">Contexto y entorno</div>
-
-    <div class="question-block">
-      <div class="question-text">Mis profesores están actualizados respecto al uso de IA en la educación.</div>
-      <div class="likert-group five" id="q5_1">
-        <button class="likert-btn" onclick="selectLikert(this,'q5_1')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_1')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_1')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_1')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_1')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">El sistema universitario actual me prepara bien para un mundo con IA.</div>
-      <div class="likert-group five" id="q5_2">
-        <button class="likert-btn" onclick="selectLikert(this,'q5_2')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_2')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_2')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_2')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_2')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Las formas de evaluación en mi universidad (exámenes, trabajos) tienen sentido en la era de la IA.</div>
-      <div class="likert-group five" id="q5_3">
-        <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_3')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_3')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_3')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">En mi familia o entorno cercano, el uso de IA es algo común y normalizado.</div>
-      <div class="likert-group five" id="q5_4">
-        <button class="likert-btn" onclick="selectLikert(this,'q5_4')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_4')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_4')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_4')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_4')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="question-block">
-      <div class="question-text">Las personas de mi entorno han influido en cómo uso la IA.</div>
-      <div class="likert-group five" id="q5_5">
-        <button class="likert-btn" onclick="selectLikert(this,'q5_5')">Totalmente<br>en desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_5')">En<br>desacuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_5')">Neutral</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_5')">De<br>acuerdo</button>
-        <button class="likert-btn" onclick="selectLikert(this,'q5_5')">Totalmente<br>de acuerdo</button>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="question-block">
-      <div class="question-text">¿Estarías dispuesto/a a participar en una entrevista de 20 minutos sobre este tema?</div>
-      <div class="btn-group" id="q5_entrevista">
-        <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(true)">Sí, me interesa</button>
-        <button class="btn-opt" onclick="selectBtn(this,'q5_entrevista'); toggleContact(false)">No por ahora</button>
-      </div>
-      <div id="contactField" style="display:none; margin-top:1rem;">
-        <div class="field-label">Correo o WhatsApp (opcional)</div>
-        <input class="text-field" type="text" id="q_contacto" placeholder="tu@correo.com o +51 9xx xxx xxx">
-      </div>
-    </div>
-
-    <div class="nav-row">
-      <button class="btn-nav btn-back" onclick="goBack(5)">&#8592; Atrás</button>
-      <button class="btn-nav btn-submit" onclick="submitForm()">Enviar respuestas &#10003;</button>
-    </div>
-  </div>
-
-  <!-- ── GRACIAS ── -->
-  <div class="thank-you" id="thankYou">
-    <div class="ty-icon">&#10003;</div>
-    <div class="ty-title">¡Gracias por participar!</div>
-    <p class="ty-text">Tus respuestas contribuyen a entender cómo la IA está moldeando la experiencia universitaria. Si dejaste tu contacto, nos comunicaremos pronto.</p>
-  </div>
-
-</div>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>
