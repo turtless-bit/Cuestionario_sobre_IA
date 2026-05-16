@@ -122,9 +122,13 @@
       text-align: center;
     }
 
-    /* Likert-5 en móvil: 3 columnas */
+    /* Likert-5 en móvil: 5 columnas en fila horizontal */
     .likert-group.five {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .likert-group.five .likert-btn {
+      font-size: 9px;
+      padding: 10px 2px;
     }
   </style>
 </head>

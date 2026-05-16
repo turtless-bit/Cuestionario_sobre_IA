@@ -243,7 +243,8 @@ body {
 /* ── Responsive ── */
 @media (max-width:480px) {
   .likert-group { grid-template-columns:repeat(2,1fr); }
-  .likert-group.five { grid-template-columns:repeat(3,1fr); }
+  .likert-group.five { grid-template-columns:repeat(5,1fr); }
+  .likert-group.five .likert-btn { font-size:9px; padding:10px 2px; }
   .field-row { grid-template-columns:1fr; }
   .section-card { padding:1.5rem 1rem; }
 }
