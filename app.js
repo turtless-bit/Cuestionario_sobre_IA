@@ -42,22 +42,33 @@ function goBack(from) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+/* ── Supabase config ── */
+const SUPABASE_URL = 'https://rttlxajrakrcosyyssnv.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dGx4YWpyYWtyY29zeXlzc252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4OTM1MzcsImV4cCI6MjA5NDQ2OTUzN30.R-1G58MfZWAinAl0QiOm4koUdSt1GDeX-ot00Bs3728';
+
 function collectData() {
   const data = {};
   data.carrera = document.getElementById('q_carrera').value;
 
-  ['q_ciclo', 'q_edad', 'q_genero', 'q_desde', 'q_frecuencia'].forEach(f => {
+  // Ciclo: viene de botones
+  const ciclo = document.querySelector('#q_ciclo .selected');
+  data.ciclo = ciclo ? ciclo.textContent.trim() : '';
+
+  // Edad: viene del slider directamente
+  data.edad = parseInt(document.getElementById('q_edad').value);
+
+  ['q_genero', 'q_desde', 'q_frecuencia'].forEach(f => {
     const s = document.querySelector('#' + f + ' .selected');
-    data[f] = s ? s.textContent.trim() : '';
+    data[f.replace('q_', '')] = s ? s.textContent.trim() : '';
   });
 
-  data.pct_uso = document.getElementById('q_pct').value;
+  data.pct_trabajo = parseInt(document.getElementById('q_pct').value);
 
   [
     'q2a1','q2a2','q2a3','q2a4','q2a5','q2a6',
-    'q2b1','q2b2','q2b3','q2b4',
+    'q2b2','q2b3',
     'q3_1','q3_2','q3_3','q3_4','q3_5','q3_6',
-    'q4_1','q4_2','q4_3','q4_4','q4_5','q4_6',
+    'q4_1','q4_2','q4_3','q4_5','q4_6',
     'q5_1','q5_2','q5_3','q5_4','q5_5'
   ].forEach(id => {
     const s = document.querySelector('#' + id + ' .selected');
@@ -65,19 +76,52 @@ function collectData() {
   });
 
   const e = document.querySelector('#q5_entrevista .selected');
-  data.entrevista = e ? e.textContent.trim() : '';
+  data.q5_entrevista = e ? e.textContent.trim() : '';
   data.contacto = document.getElementById('q_contacto').value;
   return data;
 }
 
-function submitForm() {
-  // TODO: replace console.log with Supabase insert
-  console.log('Respuestas:', JSON.stringify(collectData(), null, 2));
+async function submitForm() {
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = 'Enviando…';
+  btn.disabled = true;
 
-  document.getElementById('sec5').classList.remove('active');
-  document.getElementById('thankYou').classList.add('active');
-  document.getElementById('progressBar').style.display = 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const data = collectData();
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/respuestas`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(JSON.stringify(err));
+    }
+
+    // Éxito
+    document.getElementById('sec5').classList.remove('active');
+    document.getElementById('thankYou').classList.add('active');
+    document.getElementById('progressBar').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    console.error('Error al guardar:', err);
+    btn.textContent = 'Error al enviar ✕';
+    btn.style.background = '#D85A30';
+    btn.disabled = false;
+    setTimeout(() => {
+      btn.textContent = 'Enviar respuestas ✓';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }
 }
 
 
