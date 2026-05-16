@@ -57,9 +57,10 @@ function collectData() {
   // Edad: viene del slider directamente
   data.edad = parseInt(document.getElementById('q_edad').value);
 
-  ['q_genero', 'q_desde', 'q_frecuencia'].forEach(f => {
+  const camposBD = {'q_genero':'genero','q_desde':'desde_cuando','q_frecuencia':'frecuencia'};
+  Object.entries(camposBD).forEach(([f, col]) => {
     const s = document.querySelector('#' + f + ' .selected');
-    data[f.replace('q_', '')] = s ? s.textContent.trim() : '';
+    data[col] = s ? s.textContent.trim() : '';
   });
 
   data.pct_trabajo = parseInt(document.getElementById('q_pct').value);
