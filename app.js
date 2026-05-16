@@ -26,7 +26,7 @@ function updateSlider(val) {
 
 function toggleContact(show) {
   document.getElementById('contactField').style.display = show ? 'block' : 'none';
-  const wrap = document.querySelector('#q5_entrevista')?.closest('.question-block');
+  const wrap = document.getElementById('q5_entrevista')?.closest('.question-block');
   if (wrap) wrap.classList.remove('q-error');
 }
 
@@ -44,8 +44,8 @@ function getMissing(secId) {
   const sec = document.getElementById(secId);
   const missing = [];
 
-  // Grupos de botones (.btn-group) y likert (.likert-group) — busca selected
-  sec.querySelectorAll('.btn-group[id], .likert-group[id]').forEach(group => {
+  // Grupos de botones (.btn-group, .ciclo-grid) y likert (.likert-group) — busca selected
+  sec.querySelectorAll('.btn-group[id], .ciclo-grid[id], .likert-group[id]').forEach(group => {
     if (!group.querySelector('.selected')) missing.push(group.id);
   });
 
@@ -65,7 +65,8 @@ function showErrors(secId, missingIds) {
   missingIds.forEach(id => {
     const group = document.getElementById(id);
     if (group) {
-      const block = group.closest('.question-block') || group.closest('.select-wrap')?.parentElement;
+      // Para el select de carrera, subir hasta .question-block
+      const block = group.closest('.question-block');
       if (block) block.classList.add('q-error');
     }
   });
@@ -122,15 +123,14 @@ function collectData() {
 
   data.pct_trabajo = parseInt(document.getElementById('q_pct').value);
 
+  // IDs del HTML → columnas de Supabase (1:1, sin workarounds)
   [
-    'q2a1', 'q2a2', 'q2a3', 'q2a4',  // q2a4 = "Priorizo resúmenes de IA" (antes q2a6 en HTML — verificar nombre en Supabase)
-    'q3_1', 'q3_2', 'q3_3', 'q3_4',
-    'q4_1', 'q4_2', 'q4_3', 'q4_5',
-    'q5_1', 'q5_2', 'q5_3'
+    'q2a1', 'q2a2', 'q2a3', 'q2a4',   // Sección 2
+    'q3_1', 'q3_2', 'q3_3', 'q3_4',   // Sección 3
+    'q4_1', 'q4_5', 'q4_3', 'q4_2',   // Sección 4
+    'q5_1', 'q5_2', 'q5_3'            // Sección 5
   ].forEach(id => {
-    // Para q2a4: leer desde el elemento HTML que tiene id="q2a6"
-    const htmlId = id === 'q2a4' ? 'q2a6' : id;
-    const s = document.querySelector('#' + htmlId + ' .selected');
+    const s = document.querySelector('#' + id + ' .selected');
     data[id] = s ? s.textContent.trim() : '';
   });
 
