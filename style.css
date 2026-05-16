@@ -65,23 +65,28 @@ body {
 
 /* ── Section cards ── */
 .section-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid var(--border);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
   border-radius: var(--radius);
   padding: 2.5rem 2rem;
   display: none;
 }
 .section-card.active { display: block; }
 
+/* Título con su propio cuadro, mismo estilo que question-block */
 .section-title {
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 700;
-  color: #fff;
+  color: var(--accent-mid);
   text-align: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 0.85rem;
   letter-spacing: -.3px;
+  background: rgba(255,255,255,0.07);
+  border: 0.5px solid rgba(175,169,236,0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
 }
 
 .subsection-title {
