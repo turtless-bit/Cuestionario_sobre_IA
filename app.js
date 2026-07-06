@@ -20,8 +20,11 @@ function selectLikert(btn, groupId) {
   if (wrap) wrap.classList.remove('q-error');
 }
 
-function updateSlider(val) {
-  document.getElementById('sliderVal').textContent = Math.round(val) + '%';
+// Selección múltiple: alterna el botón individual sin afectar a los demás
+function toggleMulti(btn) {
+  btn.classList.toggle('selected');
+  const wrap = btn.closest('.question-block');
+  if (wrap) wrap.classList.remove('q-error');
 }
 
 function toggleContact(show) {
@@ -113,26 +116,24 @@ function collectData() {
   const ciclo = document.querySelector('#q_ciclo .selected');
   data.ciclo = ciclo ? ciclo.textContent.trim() : '';
 
+  const sexo = document.querySelector('#q_sexo .selected');
+  data.sexo = sexo ? sexo.textContent.trim() : '';
+
   data.edad = parseInt(document.getElementById('q_edad').value);
 
-  const camposBD = { 'q_genero': 'genero', 'q_desde': 'desde_cuando', 'q_frecuencia': 'frecuencia' };
-  Object.entries(camposBD).forEach(([f, col]) => {
-    const s = document.querySelector('#' + f + ' .selected');
-    data[col] = s ? s.textContent.trim() : '';
-  });
-
-  data.pct_trabajo = parseInt(document.getElementById('q_pct').value);
-
-  // IDs del HTML → columnas de Supabase (1:1, sin workarounds)
+  // IDs del HTML → columnas de Supabase (selección única)
   [
-    'q2a1', 'q2a2', 'q2a3', 'q2a4',   // Sección 2
-    'q3_1', 'q3_2', 'q3_3', 'q3_4',   // Sección 3
-    'q4_1', 'q4_5', 'q4_3', 'q4_2',   // Sección 4
-    'q5_1', 'q5_2', 'q5_3'            // Sección 5
+    'q2_1', 'q2_2', 'q2_3', 'q2_4',   // Sección 2: acceso y formación tecnológica
+    'q3_1', 'q3_2', 'q3_3', 'q3_4',   // Sección 3: competencias digitales y frecuencia de uso
+    'q4_2', 'q4_3', 'q4_4'            // Sección 4: diversidad de herramientas y dominio tecnológico
   ].forEach(id => {
     const s = document.querySelector('#' + id + ' .selected');
     data[id] = s ? s.textContent.trim() : '';
   });
+
+  // Pregunta de selección múltiple (herramientas que conoce y utiliza)
+  const multi = document.querySelectorAll('#q4_1 .selected');
+  data.q4_1 = Array.from(multi).map(b => b.textContent.trim()).join(', ');
 
   const e = document.querySelector('#q5_entrevista .selected');
   data.q5_entrevista = e ? e.textContent.trim() : '';
