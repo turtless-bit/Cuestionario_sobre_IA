@@ -103,7 +103,7 @@ function goBack(from) {
 }
 
 /* ── Supabase config ── */
-const SUPABASE_URL = 'https://nmaunbcihkypxvvxdrxk.supabase.co';
+const SUPABASE_URL = 'https://nmauncbihkypxvvxdrxk.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYXVuY2JpaGt5cHh2dnhkcnhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NjkxNDksImV4cCI6MjA5OTA0NTE0OX0.vsARV4mFAyC7GXNcYeSG1yjswPE-Ji4Hs_Wi75P60E0';
 
 // Tiempo mínimo aceptable en segundos (5 minutos)
